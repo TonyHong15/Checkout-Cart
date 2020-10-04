@@ -1,8 +1,23 @@
 const express = require('express')
-const app = express()
+const cors = require('cors')
+const mongoose = require('mongoose')
 
-app.listen(3000, function() {
-    console.log('listening on 3000')
+require('dotenv').config()
+const app = express()
+const port = process.env.PORT || 3000;
+
+app.use(cors())
+app.use(express.json())
+const uri = process.env.ATLAS_URI;
+mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true }
+);
+const connection = mongoose.connection;
+connection.once('open', () => {
+  console.log("MongoDB database connection established successfully");
+})
+
+app.listen(port, function() {
+    console.log(`Server is running on port: ${port}`)
 })
 app.get('/', (req, res) => {
     res.sendFile('frontend/src/app.js', {'root': '../'})
