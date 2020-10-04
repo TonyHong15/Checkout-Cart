@@ -19,6 +19,10 @@ connection.once('open', () => {
 app.listen(port, function() {
     console.log(`Server is running on port: ${port}`)
 })
+
+const itemRouter = require('./routes/items')
+app.use('/items', itemRouter)
+
 app.get('/', (req, res) => {
     res.sendFile('frontend/src/app.js', {'root': '../'})
 })
