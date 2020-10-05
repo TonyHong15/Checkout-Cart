@@ -1,28 +1,30 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+
+const axios = require('axios')
 
 export default class AddItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      itemName: '',
+      label: '',
       price: 0.0
       
     }
-    this.onChangeItemName = this.onChangeItemName.bind(this)
+    this.onChangelabel = this.onChangelabel.bind(this)
     this.onChangePrice = this.onChangePrice.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
   componentDidMount() {
     this.setState({ 
-      itemName: 'apple',
-      price: 1.99
+      label: '',
+      price: 0.00
     });
   }
 
-  onChangeItemName(e) {
+  onChangelabel(e) {
     this.setState({
-      itemName: e.target.value
+      label: e.target.value
     });
   }
   onChangePrice(e) {
@@ -34,9 +36,19 @@ export default class AddItem extends Component {
   onSubmit(e) {
     e.preventDefault();
     const newItem = {
-      itemName: this.state.itemName,
+      label: this.state.label,
       price: this.state.price
     };
+    console.log(newItem)
+    axios.post('http://localhost:5000/items/additem', newItem)
+    .then(res => console.log(res.data))
+    .catch(function (error) {
+      console.log(error);
+    })
+    this.setState({
+      label: '',
+      price: 0
+    })
   }
   render() {
     return (
@@ -47,8 +59,8 @@ export default class AddItem extends Component {
             <label>New Item Name:
               <input type="text" 
               className="form-control"
-              value={this.state.itemName}
-              onChange={this.onChangeItemName} />
+              value={this.state.label}
+              onChange={this.onChangelabel} />
             </label>
           </div>
           
