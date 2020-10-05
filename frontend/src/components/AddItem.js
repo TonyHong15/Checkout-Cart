@@ -17,7 +17,7 @@ export default class AddItem extends Component {
 
   componentDidMount() {
     this.setState({ 
-      label: '',
+      label: 'empty',
       price: 0.00
     });
   }
@@ -46,7 +46,7 @@ export default class AddItem extends Component {
       console.log(error);
     })
     this.setState({
-      label: '',
+      label: 'empty',
       price: 0
     })
   }
