@@ -21,7 +21,10 @@ export default class CheckoutPage extends Component {
     this.calculateTotal = this.calculateTotal.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
     this.state = {items: [],
-                  total: 0.00};
+                  subtotal: 0.00,
+                  total: 0.00,
+                  tax: 0.00,
+                  discount: 0.00};
   }
 
   componentDidMount() {
@@ -34,19 +37,23 @@ export default class CheckoutPage extends Component {
     })
   }
 
-  refreshTotal(){
+  calculateTotal() {
     let tempTotal = 0
     this.state.items.map(currentitem =>{
-      let quantity = document.getElementById(currentitem._id).value
+      let quantity = parseInt(document.getElementById(currentitem._id).value)
       tempTotal += (currentitem.price * quantity)
       return tempTotal
     })
+    let discountValue = parseInt(document.getElementById('discountValue').value)
+    let tempDiscount = roundTo((discountValue*tempTotal)/100.00, 2)
+    let taxValue = parseInt(document.getElementById('taxValue').value)
+    let tempTax = roundTo((taxValue*(tempTotal-tempDiscount))/100.00, 2)
     this.setState({
-      total: roundTo(tempTotal, 2)
+      subtotal: roundTo(tempTotal, 2), 
+      discount: roundTo(tempDiscount, 2),
+      tax: roundTo(tempTax, 2),
+      total: roundTo(tempTotal + tempTax - tempDiscount, 2) 
     })
-  }
-  calculateTotal() {
-    this.refreshTotal()
   }
   
   deleteItem(id) {
@@ -54,7 +61,6 @@ export default class CheckoutPage extends Component {
       .then(res => console.log(res.data));
     this.setState({
       items: this.state.items.filter(el => el._id !== id)
-      
     });
     window.location.reload()
   }
@@ -64,6 +70,7 @@ export default class CheckoutPage extends Component {
       return <Item item={currentitem}  deleteItem={this.deleteItem} key={currentitem._id}/>;
     })
   }
+
   render() {
     return (
       <div>
@@ -79,6 +86,31 @@ export default class CheckoutPage extends Component {
         </thead>
         <tbody>
           { this.itemList() }
+        </tbody>
+      </table>
+      <table className="table">
+        <thead className="thead-light">
+          <tr>
+            <th>Extra Calculation Type</th>
+            <th>Percentage</th>
+            <th>Cost</th>           
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Discount(Applied Before Tax)</td>
+            <td>
+              <input type="number" id="discountValue" placeholder={0} defaultValue={0}></input>
+            </td>
+            <td><label type="number" id="discount">{this.state.discount * -1} </label></td>
+          </tr>
+          <tr>
+            <td>Tax (Applied After Discount)</td>
+            <td>
+              <input type="number" id="taxValue" placeholder={0} defaultValue={0}></input>
+            </td>
+            <td><label type="number" id="tax">{this.state.tax} </label></td>
+          </tr>
         </tbody>
       </table>
       <div>

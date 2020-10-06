@@ -67,7 +67,7 @@ export default class AddItem extends Component {
           </div>
           
           <div className="form-group">
-            <label>Price($): 
+            <label>Price($) (Please Enter 2 decimal Places): 
                 <input 
                 type="text" 
                 className="form-control"
