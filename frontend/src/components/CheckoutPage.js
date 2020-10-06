@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-const roundTo =require('round-to')
+import calculate from '../actions/calculate'
+
 
 const Item = props => (
   <tr>
@@ -41,18 +42,20 @@ export default class CheckoutPage extends Component {
     let tempTotal = 0
     this.state.items.map(currentitem =>{
       let quantity = parseInt(document.getElementById(currentitem._id).value)
-      tempTotal += (currentitem.price * quantity)
+      tempTotal += calculate.addQuantityItem(quantity, currentitem.price)
       return tempTotal
     })
     let discountValue = parseInt(document.getElementById('discountValue').value)
-    let tempDiscount = roundTo((discountValue*tempTotal)/100.00, 2)
+    let tempDiscount = calculate.calculateDiscount(discountValue,tempTotal)
+    console.log(tempDiscount)
     let taxValue = parseInt(document.getElementById('taxValue').value)
-    let tempTax = roundTo((taxValue*(tempTotal-tempDiscount))/100.00, 2)
+    let tempTax = calculate.calculateTax(taxValue,tempTotal,tempDiscount)
+    let total = calculate.calculateTotal(tempTax, tempTotal, tempDiscount)
     this.setState({
-      subtotal: roundTo(tempTotal, 2), 
-      discount: roundTo(tempDiscount, 2),
-      tax: roundTo(tempTax, 2),
-      total: roundTo(tempTotal + tempTax - tempDiscount, 2) 
+      subtotal: tempTotal, 
+      discount: tempDiscount,
+      tax: tempTax, 
+      total: total
     })
   }
   
