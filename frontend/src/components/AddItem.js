@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-
+import '../App.css'
 const axios = require('axios')
+
 
 export default class AddItem extends Component {
   constructor(props) {
@@ -34,7 +35,7 @@ export default class AddItem extends Component {
   }
  
   onSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
     const newItem = {
       label: this.state.label,
       price: this.state.price
@@ -49,10 +50,11 @@ export default class AddItem extends Component {
       label: 'empty',
       price: 0
     })
+    window.location.reload()
   }
   render() {
     return (
-      <div>
+      <div className="addComponent" >
         <h1>Create new Checkout Item</h1>
         <form onSubmit={this.onSubmit}>
           <div className="form-group"> 
