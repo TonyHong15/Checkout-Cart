@@ -21,6 +21,9 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 })
 
+if (process.env.NODE_ENV === 'production'){
+  app.use(express.static('frontend/build'))
+}
 app.listen(port, function() {
     console.log(`Server is running on port: ${port}`)
 })
