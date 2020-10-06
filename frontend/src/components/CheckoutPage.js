@@ -1,74 +1,82 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+
+const Item = props => (
+  <tr>
+    <td>{props.item.label}</td>
+    <td>{props.item.price}</td>
+    <td>
+        <input type="number" placeholder={0} ></input>
+        <input type='submit' value="Enter" onClick={() => { props.addQuantity(props.item._id)}}></input>
+    </td>
+    <td>
+      <input type='submit' value="Delete" onClick={() => { props.deleteItem(props.item._id) }}></input>
+    </td>
+  </tr>
+)
 
 export default class CheckoutPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      itemName: '',
-      price: 0.0
-      
-    }
-    this.onChangeItemName = this.onChangeItemName.bind(this)
-    this.onChangePrice = this.onChangePrice.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
+    this.addQuantity = this.addQuantity.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
+    this.state = {items: [],
+                  total: 0.00};
   }
 
   componentDidMount() {
-    this.setState({ 
-      itemName: 'apple',
-      price: 1.99
-    });
+    axios.get('http://localhost:5000/items/')
+    .then(response => {
+      this.setState({ items: response.data});
+    })
+    .catch((error) => {
+       console.log(error);
+    })
   }
 
-  onChangeItemName(e) {
+  addQuantity(e) {
     this.setState({
-      itemName: e.target.value
+      total: e.target.value
     });
   }
-  onChangePrice(e) {
+  deleteItem(id) {
+    axios.delete('http://localhost:5000/items/deleteitem/'+id)
+      .then(res => console.log(res.data));
     this.setState({
-      price: e.target.value
+      items: this.state.items.filter(el => el._id !== id)
+      
     });
+    console.log(this.state.total)
   }
  
   onSubmit(e) {
-    e.preventDefault();
-    const newItem = {
-      itemName: this.state.itemName,
-      price: this.state.price
-    };
+    e.preventDefault()
+    
+  }
+  itemList() {
+    return this.state.items.map(currentitem => {
+      return <Item item={currentitem} addQuantity={this.addQuantity} deleteItem={this.deleteItem} key={currentitem._id}/>;
+    })
   }
   render() {
     return (
       <div>
-        <h1>Create new Checkout Item</h1>
-        <form onSubmit={this.onSubmit}>
-          <div className="form-group"> 
-            <label>New Item Name:
-              <input type="text" 
-              className="form-control"
-              value={this.state.itemName}
-              onChange={this.onChangeItemName} />
-            </label>
-          </div>
-          
-          <div className="form-group">
-            <label>Price($): 
-                <input 
-                type="text" 
-                className="form-control"
-                value={this.state.price}
-                onChange={this.onChangePrice}
-                />
-            </label>
-          </div>
-          <div className="form-group">
-            <input type="submit" 
-            value="Create new Checkout Item" 
-            className="btn btn-primary" />
-          </div>
-        </form>
-      </div>
+      <h1>Checkout Items</h1>
+      <table className="table">
+        <thead className="thead-light">
+          <tr>
+            <th>Label</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Delete From Database</th>
+          </tr>
+        </thead>
+        <tbody>
+          { this.itemList() }
+        </tbody>
+      </table>
+
+    </div>
     )
   }
 }
