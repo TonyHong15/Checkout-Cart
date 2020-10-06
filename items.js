@@ -1,5 +1,6 @@
 const router = require('express').Router();
-let Item = require('../dbSchemas/itemSchema');
+const path = require('path')
+let Item = require(path.join(__dirname),'./itemSchema');
 
 router.route('/').get((req, res) => {
   Item.find()
