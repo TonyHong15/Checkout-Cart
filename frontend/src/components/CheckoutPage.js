@@ -28,7 +28,7 @@ export default class CheckoutPage extends Component {
   }
 
   componentDidMount() {
-    axios.get('https://csc301-assignment1-web.herokuapp.com/items')
+    axios.get('https://csc301-assignment1-web.herokuapp.com/')
     .then(response => {
       this.setState({ items: response.data});
     })

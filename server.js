@@ -26,6 +26,5 @@ app.listen(port, function() {
 })
 
 const itemRouter = require('./items')
-const { Server } = require('http')
 app.use('/items', itemRouter)
 
