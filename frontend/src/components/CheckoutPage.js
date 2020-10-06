@@ -39,6 +39,7 @@ export default class CheckoutPage extends Component {
     this.state.items.map(currentitem =>{
       let quantity = document.getElementById(currentitem._id).value
       tempTotal += (currentitem.price * quantity)
+      return tempTotal
     })
     this.setState({
       total: roundTo(tempTotal, 2)
