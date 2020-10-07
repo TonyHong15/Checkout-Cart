@@ -25,7 +25,7 @@ app.listen(port, function() {
 
 app.use(express.static(__dirname + '/frontend/dist' ))
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/frontend/dist/index.html");
+  res.sendFile(__dirname + "/frontend/app.js");
 });
 const itemRouter = require('./items')
 app.use('/items', itemRouter)
