@@ -29,8 +29,8 @@ export default class CheckoutPage extends Component {
   }
 
   componentDidMount() {
-    axios.get('https://csc301-assignment-web.herokuapp.com/items/')
-    //axios.get('http://localhost:5000/items/')
+    //axios.get('https://csc301-assignment-web.herokuapp.com/items/')
+    axios.get('http://localhost:5000/items/')
     .then(response => {
       this.setState({ items: response.data});
     })
@@ -61,8 +61,8 @@ export default class CheckoutPage extends Component {
   }
   
   deleteItem(id) {
-    axios.delete('https://csc301-assignment-web.herokuapp.com/items/deleteitem/'+id)
-    //axios.delete('http://localhost:5000/items/deleteitem/'+id)
+    //axios.delete('https://csc301-assignment-web.herokuapp.com/items/deleteitem/'+id)
+    axios.delete('http://localhost:5000/items/deleteitem/'+id)
       .then(res => console.log(res.data));
     this.setState({
       items: this.state.items.filter(el => el._id !== id)

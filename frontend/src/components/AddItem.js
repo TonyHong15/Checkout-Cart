@@ -41,8 +41,8 @@ export default class AddItem extends Component {
       price: this.state.price
     };
     console.log(newItem)
-    axios.post('https://csc301-assignment-web.herokuapp.com/items/additem', newItem)
-    //axios.post('http://localhost:5000/items/additem', newItem)
+    //axios.post('https://csc301-assignment-web.herokuapp.com/items/additem', newItem)
+    axios.post('http://localhost:5000/items/additem', newItem)
     .then(res => console.log(res.data))
     .catch(function (error) {
       console.log(error);
